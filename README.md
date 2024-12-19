@@ -32,3 +32,9 @@ cd app
 
 python -m generate.py
 ```
+
+## Next Steps
+
+- fine-tune LlaMa 3.3 8B for coding
+  - train it on good design principles such as those from [refactoringUI eBook](https://www.refactoringui.com/)
+- implement stylistic choices
