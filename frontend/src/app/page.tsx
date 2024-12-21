@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import UserPrompt from "@/components/UserPrompt";
 import ResponseCard from "@/components/ResponseCard";
 import WebpageRender from "@/components/WebpageRender";
+import { motion, AnimatePresence } from "framer-motion";
 
 interface CodeResponse {
   status: string;
@@ -34,12 +35,13 @@ export default function Home() {
     setExpandedIndex(expanded ? index : null);
   };
 
+
   const handlePromptSubmit = async (userPrompt: string) => {
     if (!userPrompt?.trim()) {
       alert("Please enter a valid prompt.");
       return;
     }
-
+ 
     setLoading(true);
     setStatus(null);
     setCodeResponses([]);
@@ -107,17 +109,33 @@ export default function Home() {
         )}
 
         {status === "success" && (
-          <div className="grid grid-cols-2 gap-6 mt-8">
-            {codeResponses.map((webpageCode, index) => (
-                <ResponseCard 
-                key={index}
-                isExpanded={expandedIndex === index}
-                onToggleExpand={(expanded: boolean) => handleToggleExpand(index, expanded)}
+          <motion.div
+            className="grid grid-cols-2 gap-6 mt-8"
+            layout // Enable layout animations on the grid container
+          >
+            <AnimatePresence>
+              {codeResponses.map((webpageCode, index) => (
+                <motion.div
+                  key={index}
+                  layout // Enable layout animations on each card
+                  initial={{ opacity: 0, scale: 0.95 }} // Start slightly smaller and invisible
+                  animate={{ opacity: 1, scale: 1 }} // Animate to full size and visible
+                  exit={{ opacity: 0, scale: 0.95 }} // Shrink slightly and fade out
+                  transition={{
+                    layout: { duration: 0.3, ease: "easeInOut" }, // Smooth movement
+                    default: { duration: 0.2 }, // Opacity and scale transitions
+                  }}
                 >
-                <WebpageRender webpageCode={webpageCode} />
-                </ResponseCard>
-            ))}
-          </div>
+                  <ResponseCard 
+                    isExpanded={expandedIndex === index}
+                    onToggleExpand={(expanded: boolean) => handleToggleExpand(index, expanded)}
+                  >
+                    <WebpageRender webpageCode={webpageCode} />
+                  </ResponseCard>
+                </motion.div>
+              ))}
+            </AnimatePresence>
+          </motion.div>
         )}
 
         {status === "failed" && !loading && (
