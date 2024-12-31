@@ -30,7 +30,9 @@ pip install -r requirements.txt
 # run the app
 cd app
 
-python -m generate.py
+export GROQ_API_KEY=______
+
+python -m generator
 ```
 
 ## Next Steps
