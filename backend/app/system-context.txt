@@ -1,0 +1,5 @@
+Create a standalone React webpage with all components contained in a single file.
+Do not include any import statements or comments in your code. Use only React and useState, and their inclusion is implied.
+Begin with the function declaration, ensure all curly brackets are properly closed after the return statement, and always end with export default followed by the function name.
+Apply Tailwind CSS styling to achieve a sleek, modern design with a high level of attention to detail. Use className parameters to style React components, incorporating a thoughtful and aesthetically pleasing palette of colors, gradients, and shadows.
+Pay careful attention to spacing, typography, and responsiveness to create a visually polished and user-friendly interface. Add hover effects, smooth transitions, and subtle animations where appropriate to enhance the user experience.

@@ -2,9 +2,7 @@ import os
 import json
 from flask import Flask, request, session, jsonify
 from flask_cors import CORS
-# from groq import Groq
-
-
+from groq import Groq
 
 
 app = Flask(__name__)
@@ -19,10 +17,12 @@ CORS(app, resources={
         "supports_credentials": True
     }
 })
-# # To set Groq API key: export GROQ_API_KEY=____
-# client = Groq(
-#     api_key=os.environ.get("GROQ_API_KEY"),
-# )
+
+# To set Groq API key: export GROQ_API_KEY=______
+client = Groq(
+    api_key=os.environ.get("GROQ_API_KEY"),
+)
+
 
 def load_example_components():
     """Load example components from JSON file"""
@@ -38,15 +38,27 @@ def load_example_components():
         return []
 
 
+def get_system_context():
+    try:
+        with open('system-context.txt', 'r') as f:
+            return f.read()
+    except FileNotFoundError:
+        print("Warning: system-context.txt not found")
+        return ''
+
+
 @app.route("/api/get-component-code", methods=['POST'])  # Changed to only POST
 def get_component_code():
     data = request.get_json()
     user_prompt = data.get('prompt')
+
+    system_context = get_system_context()
+
     # TODO Create a boiler plate React component template, given as the "role": "system" context, so that we can gurantee that the React code will compile
     # TODO Add the ability to include photos in llama's response. One way could be to have a dozen images in the repository that llama can pull from.
 
     # Flag to avoid calling the API to generate a new piece of code when debugging
-    dev = True  # Set to False when you want the API to be called. Set to True when you want to use this hardcoded option.
+    dev = False  # Set to False when you want the API to be called. Set to True when you want to use this hardcoded option.
     # This is an extremely ugly solution, but it's just to avoid spamming the Groq API when experimenting for now
     if dev:
         components = load_example_components()
@@ -64,7 +76,7 @@ def get_component_code():
         })
 
     if user_prompt:
-        num_responses = 2
+        num_responses = 2  # Number of webpages to generate per user prompt
         responses = []
         for _ in range(num_responses):
             chat_completion = client.chat.completions.create(
@@ -72,7 +84,7 @@ def get_component_code():
                 messages=[
                     {
                         "role": "system",
-                        "content": "Create a standalone React webpage with all components contained in a single file. Do not include any import statements or comments in your code. Use only React and useState, and their inclusion is implied. Begin with the function declaration, ensure all curly brackets are properly closed after the return statement, and always end with export default followed by the function name. Apply Tailwind CSS styling to achieve a sleek, modern design with a high level of attention to detail. Use className parameters to style React components, incorporating a thoughtful and aesthetically pleasing palette of colors, gradients, and shadows. Pay careful attention to spacing, typography, and responsiveness to create a visually polished and user-friendly interface. Add hover effects, smooth transitions, and subtle animations where appropriate to enhance the user experience."
+                        "content": system_context
                     },
                     {
                         "role": "user",
