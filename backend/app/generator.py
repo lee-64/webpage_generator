@@ -80,7 +80,7 @@ def get_component_code():
         responses = []
         for _ in range(num_responses):
             chat_completion = client.chat.completions.create(
-                model="llama3-8b-8192",
+                model="llama-3.3-70b-versatile",
                 messages=[
                     {
                         "role": "system",
@@ -97,7 +97,7 @@ def get_component_code():
                     }
                 ],
                 stop="```",
-                temperature=1
+                temperature=0.6
             )
             responses.append(chat_completion.choices[0].message.content)
 
