@@ -4,6 +4,7 @@ import * as Babel from "@babel/standalone";
 function WebpageRender({ webpageCode }) {
     const [Component, setComponent] = useState(null);
     const [error, setError] = useState(null);
+    const [processedCode, setProcessedCode] = useState('');
 
     useEffect(() => {
         if (!webpageCode) {
@@ -13,11 +14,13 @@ function WebpageRender({ webpageCode }) {
 
         const loadComponent = () => {
             try {
-                const codeWithoutExport = webpageCode
-                    .replace('export default', '')
+                const processedCode = webpageCode
+                    .replace('export default', '')  // Removes 'export default' from the code
+                    .replace(/^import.*[\r\n]+/gm, '')  // Remove all import statements
                     .trim();
+                setProcessedCode(processedCode)
 
-                const transpiledCode = Babel.transform(codeWithoutExport, {
+                const transpiledCode = Babel.transform(processedCode, {
                     presets: ["react"],
                     filename: 'dynamic.js',
                 }).code;
@@ -48,7 +51,7 @@ function WebpageRender({ webpageCode }) {
     }, [webpageCode]);
 
     useEffect(() => {
-        // Add escape key handler
+        // Escape key handler
         const handleEsc = (event) => {
             if (event.key === 'Escape') {
                 const overlay = document.querySelector('.modal-overlay');
@@ -74,7 +77,7 @@ function WebpageRender({ webpageCode }) {
                 <div className="mt-4">
                     <h4 className="font-bold">Debug Info:</h4>
                     <pre className="mt-2 text-xs text-gray-600 whitespace-pre-wrap">
-                        {`Original Code:\n${webpageCode}\n\nProcessed Code:\n${webpageCode.replace('export default', '')}`}
+                        {`Original Code:\n${webpageCode}\n\nProcessed Code:\n${processedCode}`}
                     </pre>
                 </div>
             </div>
