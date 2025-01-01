@@ -1,4 +1,3 @@
-// UserPrompt.jsx
 import React, { useState } from 'react';
 import { SendHorizonal } from "lucide-react";
 
