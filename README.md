@@ -37,6 +37,21 @@ python -m generator
 
 ## Next Steps
 
-- fine-tune LlaMa 3.3 8B for coding
+backend:
+- reprompt feature:
+  - user can click on their preferred webpage response card
+    - selected card moves to center, all other cards disappear
+  - a new prompt text box appears (underneath?) where the user can iterate upon their chosen response card
+  - loop this
+
+
+frontend:
+- fine-tune llama-3.3-70b-versatile for coding
   - train it on good design principles such as those from [refactoringUI eBook](https://www.refactoringui.com/)
 - implement stylistic choices
+
+### Final Steps
+
+- model toggle (at the app's header bar?)
+  - toggle between 2 models (1 strong but slow, 1 weaker but fast; llama-3.3-70b-versatile & llama3-8b-8192?)
+- _secure_ text box prompt for the user to input their Groq API key before using the app
