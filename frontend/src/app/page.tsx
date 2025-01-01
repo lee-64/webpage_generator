@@ -129,6 +129,7 @@ export default function Home() {
                   <ResponseCard 
                     isExpanded={expandedIndex === index}
                     onToggleExpand={(expanded: boolean) => handleToggleExpand(index, expanded)}
+                    generatedCode={webpageCode}
                   >
                     <WebpageRender webpageCode={webpageCode} />
                   </ResponseCard>
