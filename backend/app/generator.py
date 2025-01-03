@@ -1,5 +1,6 @@
 import os
 import json
+import random
 from flask import Flask, request, session, jsonify
 from flask_cors import CORS
 from groq import Groq
@@ -39,22 +40,46 @@ def load_example_components():
         print("Warning: Invalid JSON in examples.json")
         return []
 
+def generate_template():
+    """Load example components from JSON file"""
+    try:
+        with open('styles.json', 'r') as f:
+            styles = json.load(f)
+    except FileNotFoundError:
+        print("Warning: styles.json not found")
+    except json.JSONDecodeError:
+        print("Warning: Invalid JSON in styles.json")
+
+    # get random style chocie
+    style_name = random.choice(list(styles["styles"].keys()))
+    style = styles["styles"][style_name]
+
+    template = f'''function Card() {{ 
+    return (
+    <div className="{style["container"]}">
+        <h2 className="{style["title"]}">Title</h2>
+    </div>
+    );
+    }}'''
+
+    return template
 
 def get_system_context():
     try:
-        with open('system-context.txt', 'r') as f:
-            return f.read()
+        with open('sys-ctxt.txt', 'r') as f:
+            ctx = f.read()
+            return ctx.replace("<<replace_here>>", generate_template())
     except FileNotFoundError:
-        print("Warning: system-context.txt not found")
+        print("Warning: sys-ctxt.txt not found")
         return ''
+
+
 
 
 @app.route("/api/get-component-code", methods=['POST'])  # Changed to only POST
 def get_component_code():
     data = request.get_json()
     user_prompt = data.get('prompt')
-
-    system_context = get_system_context()
 
     # TODO Create a boiler plate React component template, given as the "role": "system" context, so that we can gurantee that the React code will compile
     # TODO Add the ability to include photos in llama's response. One way could be to have a dozen images in the repository that llama can pull from.
@@ -77,8 +102,9 @@ def get_component_code():
             "responses": []
         })
 
+    # TODO: Make parallel api calls to speed up the response time. Look into speeding it up further through Groq console.
     if user_prompt:
-        num_responses = 2  # Number of webpages to generate per user prompt
+        num_responses = 4 # Number of webpages to generate per user prompt
         responses = []
         for _ in range(num_responses):
             chat_completion = client.chat.completions.create(
@@ -86,7 +112,7 @@ def get_component_code():
                 messages=[
                     {
                         "role": "system",
-                        "content": system_context
+                        "content": get_system_context()
                     },
                     {
                         "role": "user",

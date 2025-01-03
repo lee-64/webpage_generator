@@ -5,6 +5,32 @@ function WebpageRender({ webpageCode }) {
     const [Component, setComponent] = useState(null);
     const [error, setError] = useState(null);
     const [processedCode, setProcessedCode] = useState('');
+    
+    useEffect(() => {
+        // Load Tailwind CSS stylesheet
+        const tailwindLink = document.createElement('link');
+        tailwindLink.href = 'https://cdn.tailwindcss.com';
+        tailwindLink.rel = 'stylesheet';
+        document.head.appendChild(tailwindLink);
+    
+        // Load Tailwind config script
+        const tailwindScript = document.createElement('script');
+        tailwindScript.src = 'https://cdn.tailwindcss.com';
+        tailwindScript.onload = () => {
+            window.tailwind.config = {
+                darkMode: 'class',
+                theme: { extend: {} },
+                variants: { extend: {} },
+                plugins: [],
+            };
+        };
+        document.head.appendChild(tailwindScript);
+    
+        return () => {
+            document.head.removeChild(tailwindLink);
+            document.head.removeChild(tailwindScript);
+        };
+    }, []);
 
     useEffect(() => {
         if (!webpageCode) {
