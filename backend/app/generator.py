@@ -3,6 +3,7 @@ import json
 from flask import Flask, request, session, jsonify
 from flask_cors import CORS
 from groq import Groq
+from dotenv import load_dotenv
 
 
 app = Flask(__name__)
@@ -18,6 +19,7 @@ CORS(app, resources={
     }
 })
 
+load_dotenv()
 # To set Groq API key: export GROQ_API_KEY=______
 client = Groq(
     api_key=os.environ.get("GROQ_API_KEY"),
@@ -88,7 +90,7 @@ def get_component_code():
                     },
                     {
                         "role": "user",
-                        "content": session.get("user_prompt")
+                        "content": user_prompt
                     },
                     # Prefilling the assistant message to control the output for concise code snippets
                     {
