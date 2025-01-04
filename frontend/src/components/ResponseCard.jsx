@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import SyntaxHighlighter from 'react-syntax-highlighter';
 import { tomorrowNight } from 'react-syntax-highlighter/dist/esm/styles/hljs';
+import { Copy } from 'lucide-react';
 
 const ResponseCard = ({ children, isExpanded, onToggleExpand, generatedCode }) => {
   const [isRemoved, setIsRemoved] = useState(false);
@@ -63,11 +64,33 @@ const ResponseCard = ({ children, isExpanded, onToggleExpand, generatedCode }) =
             {/* URL bar */}
             <div className="flex-1 ml-4">
               <div className="bg-white rounded-md py-1 px-3 text-xs text-gray-500 flex items-center">
-                <span className="mr-2">🔒</span>
-                <span className="truncate">localhost:3000/app</span>
+              <span className="mr-2">🔒</span>
+              <span className="truncate">localhost:3000/app</span>
               </div>
             </div>
-          </div>
+
+            {/* Copy to clipboard button */}
+            <button
+              onClick={() => {
+                navigator.clipboard.writeText(generatedCode);
+                const popup = document.createElement('div');
+                popup.innerText = 'Code copied';
+                popup.className = 'fixed bottom-4 right-4 bg-gray-600 text-white px-4 py-2 rounded shadow-lg transition-opacity duration-300 opacity-0';
+                requestAnimationFrame(() => {
+                  popup.classList.add('opacity-100');
+                });
+                document.body.appendChild(popup);
+                setTimeout(() => {
+                  document.body.removeChild(popup);
+                }, 3000);
+              }}
+              className="ml-2 p-1 rounded-md bg-gray-200 hover:bg-gray-300 transition-colors focus:outline-none"
+              title="Copy code to clipboard"
+              aria-label="Copy code to clipboard"
+            >
+              <Copy width={15} height={15} />
+            </button>
+            </div>
 
           {/* Content area */}
           <div
@@ -81,7 +104,7 @@ const ResponseCard = ({ children, isExpanded, onToggleExpand, generatedCode }) =
                 children
               ) : (
                 <pre className="max-w-auto rounded-lg">
-                   <SyntaxHighlighter language="javascript" style={tomorrowNight}>
+                   <SyntaxHighlighter language="javascript" style={tomorrowNight} customStyle={{ fontSize: '10px' }}>
                     {generatedCode}
                   </SyntaxHighlighter>
                 </pre>

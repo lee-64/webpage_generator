@@ -2,7 +2,7 @@ import os
 import json
 import random
 from flask import Flask, request, session, jsonify
-from flask_cors import CORS
+from flask_cors import CORS, cross_origin
 from groq import Groq
 from dotenv import load_dotenv
 
@@ -20,8 +20,9 @@ CORS(app, resources={
     }
 })
 
+
+# To set Groq API key: export GROQ_API_KEY=______ in env
 load_dotenv()
-# To set Groq API key: export GROQ_API_KEY=______
 client = Groq(
     api_key=os.environ.get("GROQ_API_KEY"),
 )
@@ -77,6 +78,7 @@ def get_system_context():
 
 
 @app.route("/api/get-component-code", methods=['POST'])  # Changed to only POST
+@cross_origin(supports_credentials=True)
 def get_component_code():
     data = request.get_json()
     user_prompt = data.get('prompt')
@@ -135,6 +137,7 @@ def get_component_code():
 
 
 @app.route('/submit', methods=['POST'])
+@cross_origin(supports_credentials=True)
 def submit_prompt():
     session.clear()
     data = request.get_json()

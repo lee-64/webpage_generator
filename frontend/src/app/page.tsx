@@ -4,6 +4,7 @@ import UserPrompt from "@/components/UserPrompt";
 import ResponseCard from "@/components/ResponseCard";
 import WebpageRender from "@/components/WebpageRender";
 import { motion, AnimatePresence } from "framer-motion";
+import Link from "next/link";
 
 interface CodeResponse {
   status: string;
@@ -89,73 +90,89 @@ export default function Home() {
   };
 
   return (
-    <main className="min-h-screen bg-gray-100 py-10 px-5 text-black">
-      <div className="max-w-7xl mx-auto">
-        <h1 className="text-3xl font-bold text-center mb-2">
-          Lee and Thomaz's App
-        </h1>
-        <div className="flex items-center justify-center">
-          <h3 className="text-1xl text-center flex items-center">
-            powered by&nbsp;
-            <img
-              src="https://www.ciscoinvestments.com/assets/logos/groq-logo.png"
-              width={40}
-              height={40}
-              alt="groq"
-              className="inline-block pt-1"
-            />
-          </h3>
-        </div>
-
-        <div className="max-w-[80%] mx-auto">
-          <UserPrompt onSubmit={handlePromptSubmit} />
-        </div>
-
-        {loading && (
-          <div className="flex justify-center items-center space-x-2">
-            <div className="w-2.5 h-2.5 bg-gray-700 rounded-full animate-bounce"></div>
-            <div className="w-2.5 h-2.5 bg-gray-700 rounded-full animate-bounce delay-200"></div>
-            <div className="w-2.5 h-2.5 bg-gray-700 rounded-full animate-bounce delay-400"></div>
+    <div className="bg-gray-100">
+      <main className="min-h-screen bg-gray-100 py-10 px-5 text-black">
+        <div className="max-w-7xl mx-auto">
+          <h1 className="text-3xl font-bold text-center mb-2">
+            Lee and Thomaz's App
+          </h1>
+          <div className="flex items-center justify-center">
+            <h3 className="text-1xl text-center flex items-center">
+              powered by&nbsp;
+              <Link href={"https://groq.com/"} className="hover:opacity-80">
+                <img
+                  src="https://www.ciscoinvestments.com/assets/logos/groq-logo.png"
+                  width={40}
+                  height={40}
+                  alt="groq"
+                  className="inline-block pt-1"
+                />
+              </Link>
+            </h3>
           </div>
-        )}
 
-        {status === "success" && (
-          <motion.div
-            className="grid grid-cols-2 gap-4"
-            layout // Enable layout animations on the grid container
-          >
-            <AnimatePresence>
-              {codeResponses.map((webpageCode, index) => (
-                <motion.div
-                  key={index}
-                  layout // Enable layout animations on each card
-                  initial={{ opacity: 0, scale: 0.95 }} // Start slightly smaller and invisible
-                  animate={{ opacity: 1, scale: 1 }} // Animate to full size and visible
-                  exit={{ opacity: 0, scale: 0.95 }} // Shrink slightly and fade out
-                  transition={{
-                    layout: { duration: 0.3, ease: "easeInOut" }, // Smooth movement
-                    default: { duration: 0.2 }, // Opacity and scale transitions
-                  }}
-                >
-                  <ResponseCard 
-                    isExpanded={expandedIndex === index}
-                    onToggleExpand={(expanded: boolean) => handleToggleExpand(index, expanded)}
-                    generatedCode={webpageCode}
+          <div className="max-w-[80%] mx-auto">
+            <UserPrompt onSubmit={handlePromptSubmit} />
+          </div>
+
+          {loading && (
+            <div className="flex justify-center items-center space-x-2">
+              <motion.div
+                className="w-2.5 h-2.5 bg-gray-700 rounded-full"
+                animate={{ y: [0, -10, 0] }}
+                transition={{ repeat: Infinity, duration: 0.6, ease: "easeInOut" }}
+              />
+              <motion.div
+                className="w-2.5 h-2.5 bg-gray-700 rounded-full"
+                animate={{ y: [0, -10, 0] }}
+                transition={{ repeat: Infinity, duration: 0.6, ease: "easeInOut", delay: 0.2 }}
+              />
+              <motion.div
+                className="w-2.5 h-2.5 bg-gray-700 rounded-full"
+                animate={{ y: [0, -10, 0] }}
+                transition={{ repeat: Infinity, duration: 0.6, ease: "easeInOut", delay: 0.4 }}
+              />
+            </div>
+          )}
+
+          {status === "success" && (
+            <motion.div
+              className="grid grid-cols-2 gap-4"
+              layout // Enable layout animations on the grid container
+            >
+              <AnimatePresence>
+                {codeResponses.map((webpageCode, index) => (
+                  <motion.div
+                    key={index}
+                    layout // Enable layout animations on each card
+                    initial={{ opacity: 0, scale: 0.95 }} // Start slightly smaller and invisible
+                    animate={{ opacity: 1, scale: 1 }} // Animate to full size and visible
+                    exit={{ opacity: 0, scale: 0.95 }} // Shrink slightly and fade out
+                    transition={{
+                      layout: { duration: 0.3, ease: "easeInOut" }, // Smooth movement
+                      default: { duration: 0.2 }, // Opacity and scale transitions
+                    }}
                   >
-                    <WebpageRender webpageCode={webpageCode} />
-                  </ResponseCard>
-                </motion.div>
-              ))}
-            </AnimatePresence>
-          </motion.div>
-        )}
+                    <ResponseCard 
+                      isExpanded={expandedIndex === index}
+                      onToggleExpand={(expanded: boolean) => handleToggleExpand(index, expanded)}
+                      generatedCode={webpageCode}
+                    >
+                      <WebpageRender webpageCode={webpageCode} />
+                    </ResponseCard>
+                  </motion.div>
+                ))}
+              </AnimatePresence>
+            </motion.div>
+          )}
 
-        {status === "failed" && !loading && (
-          <p className="text-center text-red-500 mt-4">
-            Failed to fetch responses. Please try again.
-          </p>
-        )}
-      </div>
-    </main>
+          {status === "failed" && !loading && (
+            <p className="text-center text-red-500 mt-4">
+              Failed to fetch responses. Please try again.
+            </p>
+          )}
+        </div>
+      </main>
+    </div>
   );
 }
