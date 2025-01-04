@@ -94,23 +94,34 @@ export default function Home() {
         <h1 className="text-3xl font-bold text-center mb-2">
           Lee and Thomaz's App
         </h1>
-        <h3 className="text-1xl text-center">
-          Inspiration powered by <span className="font-bold text-orange-400">Groq</span>
-        </h3>
+        <div className="flex items-center justify-center">
+          <h3 className="text-1xl text-center flex items-center">
+            powered by&nbsp;
+            <img
+              src="https://www.ciscoinvestments.com/assets/logos/groq-logo.png"
+              width={40}
+              height={40}
+              alt="groq"
+              className="inline-block pt-1"
+            />
+          </h3>
+        </div>
 
         <div className="max-w-[80%] mx-auto">
           <UserPrompt onSubmit={handlePromptSubmit} />
         </div>
 
         {loading && (
-          <div className="text-center py-4">
-            <p className="text-gray-700">Loading...</p>
+          <div className="flex justify-center items-center space-x-2">
+            <div className="w-2.5 h-2.5 bg-gray-700 rounded-full animate-bounce"></div>
+            <div className="w-2.5 h-2.5 bg-gray-700 rounded-full animate-bounce delay-200"></div>
+            <div className="w-2.5 h-2.5 bg-gray-700 rounded-full animate-bounce delay-400"></div>
           </div>
         )}
 
         {status === "success" && (
           <motion.div
-            className="grid grid-cols-2 gap-6 mt-8"
+            className="grid grid-cols-2 gap-4"
             layout // Enable layout animations on the grid container
           >
             <AnimatePresence>

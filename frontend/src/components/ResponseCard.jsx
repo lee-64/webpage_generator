@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
+import SyntaxHighlighter from 'react-syntax-highlighter';
+import { tomorrowNight } from 'react-syntax-highlighter/dist/esm/styles/hljs';
 
 const ResponseCard = ({ children, isExpanded, onToggleExpand, generatedCode }) => {
   const [isRemoved, setIsRemoved] = useState(false);
@@ -78,8 +80,10 @@ const ResponseCard = ({ children, isExpanded, onToggleExpand, generatedCode }) =
               {viewMode === 'preview' ? (
                 children
               ) : (
-                <pre className="bg-gray-50 p-4 rounded-lg overflow-auto">
-                  <code className="text-sm text-gray-800">{generatedCode}</code>
+                <pre className="max-w-auto rounded-lg">
+                   <SyntaxHighlighter language="javascript" style={tomorrowNight}>
+                    {generatedCode}
+                  </SyntaxHighlighter>
                 </pre>
               )}
             </div>
