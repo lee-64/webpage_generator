@@ -5,6 +5,7 @@ import ResponseCard from "@/components/ResponseCard";
 import WebpageRender from "@/components/WebpageRender";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
+import AnimatedTitle from '@/components/AnimatedTitle';
 
 interface CodeResponse {
   status: string;
@@ -93,28 +94,16 @@ export default function Home() {
     <div className="bg-gray-100 font-quicksand-700">
       <main className="min-h-screen bg-gray-100 py-10 px-5 text-black">
         <div className="max-w-7xl mx-auto">
-          <h1 className="text-5xl font-bold text-center mb-2">
-          Forge<span className="bg-gradient-to-r from-purple-400 via-pink-500 to-red-500 bg-clip-text text-transparent">UI</span>
-          </h1>
-          <div className="flex items-center justify-center">
-            <h3 className="text-sm text-center flex items-center">
-              powered by&nbsp;
-              <Link href={"https://groq.com/"} className="hover:opacity-80">
-                <img
-                  src="https://www.ciscoinvestments.com/assets/logos/groq-logo.png"
-                  width={40}
-                  height={40}
-                  alt="groq"
-                  className="inline-block pt-1"
-                />
-              </Link>
-            </h3>
-          </div>
+          
+          {/* Title Section */}
+          <AnimatedTitle/>
 
+          {/* Prompt Section */}
           <div className="max-w-[80%] mx-auto">
             <UserPrompt onSubmit={handlePromptSubmit} />
           </div>
 
+          {/* Loading Buttons */}
           {loading && (
             <div className="flex justify-center items-center space-x-2">
               <motion.div
@@ -135,6 +124,7 @@ export default function Home() {
             </div>
           )}
 
+          {/* Grid Section */}
           {status === "success" && (
             <motion.div
               className="grid grid-cols-2 gap-4"
@@ -166,6 +156,7 @@ export default function Home() {
             </motion.div>
           )}
 
+          {/* Error Message */}
           {status === "failed" && !loading && (
             <p className="text-center text-red-500 mt-4">
               Failed to fetch responses. Please try again.
