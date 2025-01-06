@@ -87,7 +87,7 @@ def get_component_code():
     # TODO Add the ability to include photos in llama's response. One way could be to have a dozen images in the repository that llama can pull from.
 
     # Flag to avoid calling the API to generate a new piece of code when debugging
-    dev = False  # Set to False when you want the API to be called. Set to True when you want to use this hardcoded option.
+    dev = True  # Set to False when you want the API to be called. Set to True when you want to use this hardcoded option.
     # This is an extremely ugly solution, but it's just to avoid spamming the Groq API when experimenting for now
     if dev:
         components = load_example_components()

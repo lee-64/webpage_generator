@@ -65,7 +65,7 @@ const ResponseCard = ({ children, isExpanded, onToggleExpand, generatedCode }) =
             <div className="flex-1 ml-4">
               <div className="bg-white rounded-md py-1 px-3 text-xs text-gray-500 flex items-center">
               <span className="mr-2">🔒</span>
-              <span className="truncate">localhost:3000/app</span>
+              <span className="truncate">myapp.com/home</span>
               </div>
             </div>
 
@@ -75,24 +75,28 @@ const ResponseCard = ({ children, isExpanded, onToggleExpand, generatedCode }) =
                 navigator.clipboard.writeText(generatedCode);
                 const popup = document.createElement('div');
                 popup.innerText = 'Code copied';
-                popup.className = 'fixed bottom-4 right-4 bg-gray-600 text-white px-4 py-2 rounded shadow-lg transition-opacity duration-300 opacity-0';
+                popup.className = 'fixed bottom-4 right-4 bg-gray-800/80 text-white px-4 py-2 rounded-lg shadow-lg transition-transform duration-200 transform translate-y-10 opacity-0';
                 requestAnimationFrame(() => {
-                  popup.classList.add('opacity-100');
+                  popup.classList.add('translate-y-0', 'opacity-100');
                 });
                 document.body.appendChild(popup);
                 setTimeout(() => {
+                  popup.classList.remove('translate-y-0', 'opacity-100');
+                  popup.classList.add('translate-y-10', 'opacity-0');
+                  setTimeout(() => {
                   document.body.removeChild(popup);
+                  }, 500);
                 }, 3000);
-              }}
-              className="ml-2 p-1 rounded-md bg-gray-200 hover:bg-gray-300 transition-colors focus:outline-none"
-              title="Copy code to clipboard"
-              aria-label="Copy code to clipboard"
-            >
-              <Copy width={15} height={15} />
-            </button>
-            </div>
+                }}
+                className="ml-2 p-1 rounded-md bg-gray-200 hover:bg-gray-300 transition-colors focus:outline-none"
+                title="Copy code to clipboard"
+                aria-label="Copy code to clipboard"
+              >
+                <Copy width={15} height={15} />
+              </button>
+              </div>
 
-          {/* Content area */}
+              {/* Content area */}
           <div
             className={`
               bg-white w-full overflow-auto

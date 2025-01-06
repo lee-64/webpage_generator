@@ -90,14 +90,14 @@ export default function Home() {
   };
 
   return (
-    <div className="bg-gray-100">
+    <div className="bg-gray-100 font-quicksand-700">
       <main className="min-h-screen bg-gray-100 py-10 px-5 text-black">
         <div className="max-w-7xl mx-auto">
-          <h1 className="text-3xl font-bold text-center mb-2">
-            Lee and Thomaz's App
+          <h1 className="text-5xl font-bold text-center mb-2">
+          Forge<span className="bg-gradient-to-r from-purple-400 via-pink-500 to-red-500 bg-clip-text text-transparent">UI</span>
           </h1>
           <div className="flex items-center justify-center">
-            <h3 className="text-1xl text-center flex items-center">
+            <h3 className="text-sm text-center flex items-center">
               powered by&nbsp;
               <Link href={"https://groq.com/"} className="hover:opacity-80">
                 <img
