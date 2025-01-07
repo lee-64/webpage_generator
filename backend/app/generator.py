@@ -85,7 +85,7 @@ def get_component_code():
 
     # Flag to avoid calling the API to generate a new piece of code when debugging
     # Set to False when you want the API to be called. Set to True when you want to use this hardcoded option.
-    dev = False
+    dev = True
     if dev:
         components = load_example_components()
         if components:

@@ -6,6 +6,7 @@ import WebpageRender from "@/components/WebpageRender";
 import { motion, AnimatePresence } from "framer-motion";
 import AnimatedTitle from '@/components/AnimatedTitle';
 import ForgeLoading from '@/components/ForgeLoading';
+import Link from "next/link";
 
 interface CodeResponse {
   status: string;
@@ -56,7 +57,7 @@ export default function Home() {
 
     try {
       // First API call to submit the prompt
-      const submitResponse = await fetch('http://127.0.0.1:5000/submit', {
+      const submitResponse = await fetch('http://127.0.0.1:8000/submit', {
         method: 'POST',
         credentials: 'include',
         body: JSON.stringify({ prompt: userPrompt }),
@@ -69,7 +70,7 @@ export default function Home() {
       console.log('Submit response:', submitData);
 
       // Second API call to get the component code
-      const codeResponse = await fetch('http://127.0.0.1:5000/api/get-component-code', {
+      const codeResponse = await fetch('http://127.0.0.1:8000/api/get-component-code', {
         method: 'POST',
         credentials: 'include',
         body: JSON.stringify({
@@ -118,7 +119,7 @@ export default function Home() {
             transition={{ duration: 0.8 }}
             style={{ paddingTop: status === "success" ? '3rem' : '25vh' }}
             >
-            <AnimatedTitle />
+              <AnimatedTitle />
             </motion.div>
 
           {status !== "success" && !loading && (
@@ -129,7 +130,7 @@ export default function Home() {
 
           {loading && (
             <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-              <div className="flex justify-center items-center space-x-2">
+              <div className="flex justify-center items-center space-x-2 pt-10">
                 <ForgeLoading/>
               </div>
             </div>
@@ -205,7 +206,7 @@ export default function Home() {
           )}
         </div>
       </main>
-      <footer className="w-full bg-gray-100 py-4 relative bottom-2 left-0">
+      <footer className="w-full bg-gray-100 pb-4 relative bottom-10 left-0">
             <div className="flex justify-center items-center">
               <p className="text-xs font-quicksand-600 text-zinc-600">
                 Made with ❤️ by&nbsp;

@@ -132,57 +132,16 @@ const AnimatedTitle = () => {
                 animate={animations[animationKey]?.animate(i) || {}}
                 transition={{ duration: 0.5 }}
               >
-                {letter}
+                {<a href=''>{letter}</a>}
               </motion.span>
             ))}
           </AnimatePresence>
         </h1>
-
-        {/* Dynamic background effects */}
-        <motion.div
-          className="absolute inset-0 pointer-events-none"
-          animate={{
-            opacity: [0, 0.2, 0],
-            scale: [0.9, 1.1, 0.9],
-          }}
-          transition={{
-            duration: 3,
-            repeat: Infinity,
-            ease: 'easeInOut'
-          }}
-        >
-          <div className={`w-full h-full bg-gradient-to-r ${colorScheme} blur-2xl opacity-20`} />
-        </motion.div>
-
-        {/* Floating particles */}
-        {[...Array(12)].map((_, i) => (
-          <motion.div
-            key={i}
-            className="absolute w-1 h-1 bg-gray rounded-full mix-blend-screen"
-            animate={{
-              x: [
-                Math.random() * 200 - 100,
-                Math.random() * 200 - 100,
-              ],
-              y: [
-                Math.random() * 200 - 100,
-                Math.random() * 200 - 100,
-              ],
-              opacity: [0, 1, 0],
-              scale: [0, 1, 0],
-            }}
-            transition={{
-              duration: 2 + Math.random() * 2,
-              repeat: Infinity,
-              delay: i * 0.1,
-            }}
-          />
-        ))}
       </div>
 
       {/* Groq attribution */}
       <motion.div
-        className="flex items-center justify-center mt-6"
+        className="flex items-center justify-center mt-4 mb-6"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 0.5 }}
