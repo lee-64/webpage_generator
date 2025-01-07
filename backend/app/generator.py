@@ -12,7 +12,7 @@ app.secret_key = 'dev'
 # Configure CORS properly to handle credentials
 CORS(app, resources={
     r"/*": {
-        "origins": ["http://localhost:3000"],  # Your frontend origin
+        "origins": ["http://localhost:3000", "https://useforgeui.vercel.app/"],  # Your frontend origin
         "methods": ["GET", "POST", "OPTIONS"],
         "allow_headers": ["Content-Type"],
         "supports_credentials": True
