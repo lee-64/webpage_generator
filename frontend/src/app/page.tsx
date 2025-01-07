@@ -57,7 +57,7 @@ export default function Home() {
 
     try {
       // First API call to submit the prompt
-      const submitResponse = await fetch('http://127.0.0.1:8000/submit', {
+      const submitResponse = await fetch('https://forge-ui.onrender.com/submit', {
         method: 'POST',
         credentials: 'include',
         body: JSON.stringify({ prompt: userPrompt }),
@@ -70,7 +70,7 @@ export default function Home() {
       console.log('Submit response:', submitData);
 
       // Second API call to get the component code
-      const codeResponse = await fetch('http://127.0.0.1:8000/api/get-component-code', {
+      const codeResponse = await fetch('https://forge-ui.onrender.com/api/get-component-code', {
         method: 'POST',
         credentials: 'include',
         body: JSON.stringify({
