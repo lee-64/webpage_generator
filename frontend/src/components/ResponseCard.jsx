@@ -59,9 +59,9 @@ const ResponseCard = ({
             if (transition) setIsRemoved(true);
           }}
           className={`
-            bg-gray-100 rounded-xl shadow-xl overflow-hidden hover:shadow-2xl transition-all duration-300
-            ${isExpanded ? 'fixed top-4 left-4 right-4 bottom-4 z-50' : 'relative'}
-            ${isSelected ? 'ring-2 ring-blue-500 ring-opacity-90' : ''}
+            bg-gray-100 rounded-xl shadow-xl overflow-hidden hover:shadow-xl transition-all duration-300
+            ${isExpanded ? 'fixed top-10 left-20 right-20 bottom-10 z-50' : 'relative'}
+            ${isSelected ? 'ring-2 ring-offset-2 ring-blue-500 ring-opacity-80' : ''}
           `}
         >
           {/* Rest of the component remains the same */}

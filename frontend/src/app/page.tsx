@@ -5,6 +5,7 @@ import ResponseCard from "@/components/ResponseCard";
 import WebpageRender from "@/components/WebpageRender";
 import { motion, AnimatePresence } from "framer-motion";
 import AnimatedTitle from '@/components/AnimatedTitle';
+import ForgeLoading from '@/components/ForgeLoading';
 
 interface CodeResponse {
   status: string;
@@ -108,62 +109,39 @@ export default function Home() {
 
   return (
     <div className="bg-gray-100 font-quicksand-700">
-      <main className="min-h-screen bg-gray-100 py-10 px-5 text-black">
+      <main className="min-h-screen bg-gray-100 py-10 px-5 text-black relative">
         <div className="max-w-7xl mx-auto">
             <motion.div
             className={`flex flex-col justify-center items-center ${status === "success" ? "top-0 left-0 w-full z-50" : ""}`}
             initial={{ y: 0 }}
-            animate={{ y: status === "success" ? -20 : 0 }}
+            animate={{ y: status === "success" ? -40 : 0 }}
             transition={{ duration: 0.8 }}
-            style={{ paddingTop: status === "success" ? '1rem' : '25vh' }}
+            style={{ paddingTop: status === "success" ? '3rem' : '25vh' }}
             >
             <AnimatedTitle />
             </motion.div>
 
           {status !== "success" && !loading && (
             <div className="w-[80%] max-w-3xl mx-auto justify-center">
-              <UserPrompt onSubmit={handlePromptSubmit} placeholder="Create a TODO list..." />
+              <UserPrompt onSubmit={handlePromptSubmit} placeholder="Create a TODO list..." isSuggesting={true}/>
             </div>
           )}
 
           {loading && (
             <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
               <div className="flex justify-center items-center space-x-2">
-                <motion.div
-                  className="w-2.5 h-2.5 bg-gray-700 rounded-full"
-                  animate={{ y: [0, -10, 0] }}
-                  transition={{ repeat: Infinity, duration: 0.6, ease: "easeInOut" }}
-                />
-                <motion.div
-                  className="w-2.5 h-2.5 bg-gray-700 rounded-full"
-                  animate={{ y: [0, -10, 0] }}
-                  transition={{ repeat: Infinity, duration: 0.6, ease: "easeInOut", delay: 0.2 }}
-                />
-                <motion.div
-                  className="w-2.5 h-2.5 bg-gray-700 rounded-full"
-                  animate={{ y: [0, -10, 0] }}
-                  transition={{ repeat: Infinity, duration: 0.6, ease: "easeInOut", delay: 0.4 }}
-                />
+                <ForgeLoading/>
               </div>
             </div>
           )}
 
           {status === "success" && (
             <motion.div
-              className="mb-6"
+              className="mb-6 mx-20"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 0.6 }}
             >
-              <motion.p
-                className="text-gray-600 text-center mb-8"
-                initial={{ opacity: 0, y: -10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.3 }}
-              >
-                Click your choice to refine your result with a prompt below.
-              </motion.p>
-
               <motion.div className="grid grid-cols-2 gap-4" layout>
                 <AnimatePresence>
                   {codeResponses.map((webpageCode, index) => (
@@ -193,13 +171,22 @@ export default function Home() {
                 </AnimatePresence>
               </motion.div>
 
+              <motion.p
+                className="text-center text-xs my-4 font-quicksand-600 text-gray-500"
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.3 }}
+              >
+                Click your choice to refine your result with a prompt below.
+              </motion.p>
+
               <motion.div
                 className="w-full max-w-3xl mx-auto mt-8"
                 initial={{ y: 20, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
                 transition={{ delay: 0.3 }}
               >
-                <UserPrompt onSubmit={handlePromptSubmit} placeholder="Refine your selection..." />
+                <UserPrompt onSubmit={handlePromptSubmit} placeholder="Refine your selection..." isSuggesting={false} />
               </motion.div>
             </motion.div>
           )}
@@ -213,11 +200,21 @@ export default function Home() {
           {/* Show prompt at bottom when loading after success */}
           {loading && status === "success" && (
             <div className="fixed bottom-10 left-1/2 transform -translate-x-1/2 w-full max-w-3xl px-5">
-              <UserPrompt onSubmit={handlePromptSubmit} placeholder="Refine your selection..." />
+              <UserPrompt onSubmit={handlePromptSubmit} placeholder="Refine your selection..." isSuggesting={false}/>
             </div>
           )}
         </div>
       </main>
+      <footer className="w-full bg-gray-100 py-4 relative bottom-2 left-0">
+            <div className="flex justify-center items-center">
+              <p className="text-xs font-quicksand-600 text-zinc-600">
+                Made with ❤️ by&nbsp;
+                <a className="underline" href="">Lee</a> &&nbsp;
+                <a className="underline" href="https://thomazbonato.vercel.app/">Tom</a>&nbsp; 
+                on <a className="underline" href="https://github.com/lee-64/webpage_generator.git">Github</a>
+              </p>
+            </div>
+          </footer>
     </div>
   );
 }

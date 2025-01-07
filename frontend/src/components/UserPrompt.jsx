@@ -1,7 +1,12 @@
 import React, { useState } from 'react';
 import { SendHorizonal } from "lucide-react";
 
-function UserPrompt({ onSubmit, placeholder }) {
+function UserPrompt({ onSubmit, placeholder, isSuggesting }) {
+    const suggestedPrompts = [
+        { text: "Shimmer skeleton loader", href: "#" },
+        { text: "Create a login component", href: "#" },
+        { text: "Make a product card with tilt hover", href: "#" }
+       ]
     const [inputPrompt, setPrompt] = useState('');
 
     const handleSubmit = (event) => {
@@ -24,27 +29,40 @@ function UserPrompt({ onSubmit, placeholder }) {
 
     return (
         <div className="p-5">
-            <form onSubmit={handleSubmit} className="flex flex-col">
-                <div className='flex'>
+            <form onSubmit={handleSubmit} className="flex flex-col mb-4">
+                <div className="relative flex items-center gap-2">
                     <input
                         type="text"
                         id="userInput"
                         value={inputPrompt}
                         onChange={(e) => setPrompt(e.target.value)}
-                        className="border rounded w-full p-2 mb-4 focus:outline-none focus:ring-2 focus:ring-blue-500 text-black"
+                        className="flex-1 transition-all border border-gray-200 rounded-xl p-3 pr-12 bg-white text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-offset-2 focus:ring-gray-300 text-sm"
                         placeholder={placeholder}
                         required
                     />
-                    
                     <button
                         type="submit"
-                        className="max-w-[30%] mb-4 mx-auto bg-transparent text-black px-4 py-2 rounded hover:text-gray-400 transition-colors"
+                        className="absolute right-4 p-2 text-gray-400 hover:text-gray-600 transition-colors"
                     >
                         <SendHorizonal size={20} />
-                        <span className='sr-only'>Submit </span>
+                        <span className="sr-only">Submit</span>
                     </button>
                 </div>
             </form>
+            
+            {isSuggesting && (
+            <div className="flex flex-wrap justify-center gap-2 mt-2">
+            {suggestedPrompts.map((prompt, index) => (
+                <button
+                    key={index}
+                    onClick={() => onSubmit(prompt.text)}
+                    className="px-4 py-2 bg-gray-50 text-gray-600 text-sm rounded-full border border-gray-200 hover:bg-gray-100 hover:border-gray-300 transition-all"
+                >
+                    {prompt.text}
+                </button>
+            ))}
+            </div>
+            )}
         </div>
     );
 }
