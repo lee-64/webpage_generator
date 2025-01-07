@@ -38,20 +38,20 @@ python -m generator
 ## Next Steps
 
 backend:
-- reprompt feature:
-  - user can click on their preferred webpage response card
-    - selected card moves to center, all other cards disappear
-  - a new prompt text box appears (underneath?) where the user can iterate upon their chosen response card
-  - loop this
+- ability to include photos in llama's response; one way could be to have a dozen images in the repository that llama can pull from
 
 
 frontend:
-- fine-tune llama-3.3-70b-versatile for coding
+- fine-tune llama-3.3-70b-versatile for coding (still necessary?)
   - train it on good design principles such as those from [refactoringUI eBook](https://www.refactoringui.com/)
-- implement stylistic choices
+- “Made with ❤️ by Lee & Tom” with links to us
+- add a place to put your own api key safely
+- slider/option to control num of responses (definitely set a cap though--maybe a limit of 4-5?)
+- implement a simple way to clear the current chat (probably don't need to "create a new chat" like chatgpt or claude--I think I'm okay with this app being a one-page, no-storage app that doesn't save your chat history once you navigate away if you are)
 
-### Final Steps
 
+other:
+- Make GitHub repo public and have it linked somewhere with an option to give it a Star
+- “advanced settings/look inside!” to modify system prompt, etc.
 - model toggle (at the app's header bar?)
   - toggle between 2 models (1 strong but slow, 1 weaker but fast; llama-3.3-70b-versatile & llama3-8b-8192?)
-- _secure_ text box prompt for the user to input their Groq API key before using the app
