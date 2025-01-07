@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { SendHorizonal } from "lucide-react";
 
-function UserPrompt({ onSubmit }) {
+function UserPrompt({ onSubmit, placeholder }) {
     const [inputPrompt, setPrompt] = useState('');
 
     const handleSubmit = (event) => {
@@ -25,9 +25,6 @@ function UserPrompt({ onSubmit }) {
     return (
         <div className="p-5">
             <form onSubmit={handleSubmit} className="flex flex-col">
-                <label htmlFor="userInput" className="block text-lg font-medium mb-2">
-                    Enter Your Prompt:
-                </label>
                 <div className='flex'>
                     <input
                         type="text"
@@ -35,7 +32,7 @@ function UserPrompt({ onSubmit }) {
                         value={inputPrompt}
                         onChange={(e) => setPrompt(e.target.value)}
                         className="border rounded w-full p-2 mb-4 focus:outline-none focus:ring-2 focus:ring-blue-500 text-black"
-                        placeholder="Create a TODO list..."
+                        placeholder={placeholder}
                         required
                     />
                     

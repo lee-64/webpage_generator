@@ -6,7 +6,6 @@ from flask_cors import CORS, cross_origin
 from groq import Groq
 from dotenv import load_dotenv
 
-
 app = Flask(__name__)
 app.secret_key = 'dev'
 
@@ -19,7 +18,6 @@ CORS(app, resources={
         "supports_credentials": True
     }
 })
-
 
 # To set Groq API key: export GROQ_API_KEY=______ in env
 load_dotenv()
@@ -41,6 +39,7 @@ def load_example_components():
         print("Warning: Invalid JSON in examples.json")
         return []
 
+
 def generate_template():
     """Load example components from JSON file"""
     try:
@@ -51,7 +50,7 @@ def generate_template():
     except json.JSONDecodeError:
         print("Warning: Invalid JSON in styles.json")
 
-    # get random style chocie
+    # Get random style choice
     style_name = random.choice(list(styles["styles"].keys()))
     style = styles["styles"][style_name]
 
@@ -65,6 +64,7 @@ def generate_template():
 
     return template
 
+
 def get_system_context():
     try:
         with open('sys-ctxt.txt', 'r') as f:
@@ -75,29 +75,26 @@ def get_system_context():
         return ''
 
 
-
-
-@app.route("/api/get-component-code", methods=['POST'])  # Changed to only POST
+@app.route("/api/get-component-code", methods=['POST'])
 @cross_origin(supports_credentials=True)
 def get_component_code():
     data = request.get_json()
     user_prompt = data.get('prompt')
-
-    # TODO Create a boiler plate React component template, given as the "role": "system" context, so that we can gurantee that the React code will compile
-    # TODO Add the ability to include photos in llama's response. One way could be to have a dozen images in the repository that llama can pull from.
+    selected_code = data.get('selectedCode', None)
+    message_history = data.get('messageHistory', [])
 
     # Flag to avoid calling the API to generate a new piece of code when debugging
-    dev = False  # Set to False when you want the API to be called. Set to True when you want to use this hardcoded option.
-    # This is an extremely ugly solution, but it's just to avoid spamming the Groq API when experimenting for now
+    # Set to False when you want the API to be called. Set to True when you want to use this hardcoded option.
+    dev = False
     if dev:
         components = load_example_components()
         if components:
             return jsonify({
                 "status": "success",
-                "responses": [components[0]['code'], 
-                              components[1]['code'],
-                              components[2]['code'],
-                              components[3]['code'],]
+                "responses": [components[0]['code'],
+                              # components[1]['code'],
+                              # components[2]['code'],
+                              components[3]['code'], ]
             })
         return jsonify({
             "status": "failed",
@@ -106,8 +103,28 @@ def get_component_code():
 
     # TODO: Make parallel api calls to speed up the response time. Look into speeding it up further through Groq console.
     if user_prompt:
-        num_responses = 4 # Number of webpages to generate per user prompt
+        num_responses = 2  # Number of webpages to generate per user prompt
         responses = []
+
+        # If the user has selected a generated response, add it to the message history
+        if selected_code:
+            message_history.append({
+                "role": "assistant",
+                "content": f"```jsx\n{selected_code}\n```",
+            })
+            # Add a system message to guide towards similar style
+            message_history.append({
+                "role": "system",
+                "content": "Generate a response similar in style and structure to the user's previous response, iterating and improving where requested."
+            })
+
+        # Add the new user prompt
+        message_history.append({
+            "role": "user",
+            "content": user_prompt
+        })
+
+        # Generate responses
         for _ in range(num_responses):
             chat_completion = client.chat.completions.create(
                 model="llama-3.3-70b-versatile",
@@ -116,10 +133,7 @@ def get_component_code():
                         "role": "system",
                         "content": get_system_context()
                     },
-                    {
-                        "role": "user",
-                        "content": user_prompt
-                    },
+                    *message_history,
                     # Prefilling the assistant message to control the output for concise code snippets
                     {
                         "role": "assistant",
@@ -131,9 +145,15 @@ def get_component_code():
             )
             responses.append(chat_completion.choices[0].message.content)
 
-        return jsonify({"status": "success", "responses": responses})
+        return jsonify({"status": "success",
+                        "responses": responses,
+                        "messageHistory": message_history  # Return updated history
+                        })
 
-    return jsonify({"status": "failed", "responses": None})
+    return jsonify({"status": "failed",
+                    "responses": None,
+                    "messageHistory": message_history
+                    })
 
 
 @app.route('/submit', methods=['POST'])
@@ -143,7 +163,7 @@ def submit_prompt():
     data = request.get_json()
     user_prompt = data.get("prompt", 'Create a TODO list')
     session['user_prompt'] = user_prompt
-    
+
     return jsonify({'message': f'Input {user_prompt} was received successfully'})
 
 

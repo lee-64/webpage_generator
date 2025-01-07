@@ -4,16 +4,34 @@ import SyntaxHighlighter from 'react-syntax-highlighter';
 import { tomorrowNight } from 'react-syntax-highlighter/dist/esm/styles/hljs';
 import { Copy } from 'lucide-react';
 
-const ResponseCard = ({ children, isExpanded, onToggleExpand, generatedCode }) => {
+const ResponseCard = ({
+  children,
+  isExpanded,
+  onToggleExpand,
+  generatedCode,
+  isSelected,
+  onSelect
+}) => {
   const [isRemoved, setIsRemoved] = useState(false);
   const [transition, setTransition] = useState(false);
-  const [viewMode, setViewMode] = useState('preview'); // New state for toggle
+  const [viewMode, setViewMode] = useState('preview');
 
   const onToggleRemove = () => {
     setTransition(true);
     console.log("Should be removed.");
   };
 
+  const handleCardClick = (event) => {
+    // Only trigger selection if not clicking on a button or the modal overlay
+    const target = event.target;
+    if (
+      !target.closest('button') &&
+      !target.classList.contains('modal-overlay') &&
+      onSelect
+    ) {
+      onSelect();
+    }
+  };
 
   return (
     <>
@@ -27,6 +45,7 @@ const ResponseCard = ({ children, isExpanded, onToggleExpand, generatedCode }) =
 
       {!isRemoved && (
         <motion.div
+          onClick={handleCardClick}
           animate={
             transition
               ? { opacity: 0, y: -50, scale: 0.4, rotate: -30 }
@@ -42,11 +61,11 @@ const ResponseCard = ({ children, isExpanded, onToggleExpand, generatedCode }) =
           className={`
             bg-gray-100 rounded-xl shadow-xl overflow-hidden hover:shadow-2xl transition-all duration-300
             ${isExpanded ? 'fixed top-4 left-4 right-4 bottom-4 z-50' : 'relative'}
+            ${isSelected ? 'ring-2 ring-blue-500 ring-opacity-90' : ''}
           `}
         >
-          {/* Browser-like top bar */}
+          {/* Rest of the component remains the same */}
           <div className="bg-gray-200 px-4 py-2 flex items-center space-x-2 border-b border-gray-300">
-            {/* Window controls */}
             <div className="flex space-x-1.5">
               <button
                 onClick={onToggleRemove}
@@ -61,15 +80,13 @@ const ResponseCard = ({ children, isExpanded, onToggleExpand, generatedCode }) =
               />
             </div>
 
-            {/* URL bar */}
             <div className="flex-1 ml-4">
               <div className="bg-white rounded-md py-1 px-3 text-xs text-gray-500 flex items-center">
-              <span className="mr-2">🔒</span>
-              <span className="truncate">myapp.com/home</span>
+                <span className="mr-2">🔒</span>
+                <span className="truncate">myapp.com/home</span>
               </div>
             </div>
 
-            {/* Copy to clipboard button */}
             <button
               onClick={() => {
                 navigator.clipboard.writeText(generatedCode);
@@ -84,19 +101,18 @@ const ResponseCard = ({ children, isExpanded, onToggleExpand, generatedCode }) =
                   popup.classList.remove('translate-y-0', 'opacity-100');
                   popup.classList.add('translate-y-10', 'opacity-0');
                   setTimeout(() => {
-                  document.body.removeChild(popup);
+                    document.body.removeChild(popup);
                   }, 500);
                 }, 3000);
-                }}
-                className="ml-2 p-1 rounded-md bg-gray-200 hover:bg-gray-300 transition-colors focus:outline-none"
-                title="Copy code to clipboard"
-                aria-label="Copy code to clipboard"
-              >
-                <Copy width={15} height={15} />
-              </button>
-              </div>
+              }}
+              className="ml-2 p-1 rounded-md bg-gray-200 hover:bg-gray-300 transition-colors focus:outline-none"
+              title="Copy code to clipboard"
+              aria-label="Copy code to clipboard"
+            >
+              <Copy width={15} height={15} />
+            </button>
+          </div>
 
-              {/* Content area */}
           <div
             className={`
               bg-white w-full overflow-auto
@@ -108,7 +124,7 @@ const ResponseCard = ({ children, isExpanded, onToggleExpand, generatedCode }) =
                 children
               ) : (
                 <pre className="max-w-auto rounded-lg">
-                   <SyntaxHighlighter language="javascript" style={tomorrowNight} customStyle={{ fontSize: '10px' }}>
+                  <SyntaxHighlighter language="javascript" style={tomorrowNight} customStyle={{ fontSize: '10px' }}>
                     {generatedCode}
                   </SyntaxHighlighter>
                 </pre>
@@ -116,7 +132,6 @@ const ResponseCard = ({ children, isExpanded, onToggleExpand, generatedCode }) =
             </div>
           </div>
 
-          {/* Bottom status bar with toggle */}
           <div className="bg-gray-50 px-4 py-1.5 border-t border-gray-200">
             <div className="flex justify-between items-center">
               <span className="text-xs text-gray-500">Rendered Component</span>
