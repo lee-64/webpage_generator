@@ -158,7 +158,7 @@ const AnimatedTitle = () => {
         {[...Array(12)].map((_, i) => (
           <motion.div
             key={i}
-            className="absolute w-1 h-1 bg-white rounded-full mix-blend-screen"
+            className="absolute w-1 h-1 bg-gray rounded-full mix-blend-screen"
             animate={{
               x: [
                 Math.random() * 200 - 100,
