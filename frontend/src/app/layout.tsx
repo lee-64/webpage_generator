@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Lee & Tom - Groq",
+  title: "ForgeUI",
   description: "Inspiration powered by Groq",
 };
 

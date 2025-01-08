@@ -35,9 +35,9 @@ export default function Home() {
     });
 
     const suggestedPrompts = [
-        {text: "Shimmer skeleton loader", href: "#"},
+        {text: "Generate a skeleton loader", href: "#"},
         {text: "Create a login component", href: "#"},
-        {text: "Make a product card with tilt hover", href: "#"}
+        {text: "Make a product card", href: "#"}
     ]
 
     useEffect(() => {
@@ -177,12 +177,12 @@ export default function Home() {
 
                     {status !== "success" && !loading && (
                         <div className="flex flex-col items-center max-w-3xl mx-auto">
-                            <div className="w-full flex items-start space-x-2">
+                            <div className="w-full flex items-start pl-2">
                                 <div className="flex-1">
                                     <div className="w-full">
                                         <UserPrompt
                                             onSubmit={handlePromptSubmit}
-                                            placeholder="Create a TODO list..."
+                                            placeholder="Generate React components 5x faster than Claude and v0..."
                                         />
                                     </div>
                                     <div className="flex flex-wrap justify-center gap-2 mt-4">
@@ -275,7 +275,7 @@ export default function Home() {
                     )}
 
                     {status === "failed" && !loading && (
-                        <p className="text-center text-red-500 mt-4">
+                        <p className="text-xs text-center text-red-500 mt-4">
                             Failed to fetch responses. Please check your Groq API key and try again.
                         </p>
                     )}

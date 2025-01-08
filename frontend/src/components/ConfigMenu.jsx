@@ -1,5 +1,5 @@
 import React, { useRef, useEffect, useState } from 'react';
-import { Menu } from 'lucide-react';
+import { SlidersHorizontal } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Switch } from '@/components/ui/switch';
 import { Slider } from '@/components/ui/slider';
@@ -8,9 +8,9 @@ import APIKeyInput from './APIKeyInput';
 export const ConfigButton = ({ onClick }) => (
     <button
         onClick={onClick}
-        className="h-[52px] px-4 rounded-lg hover:bg-gray-200 transition-colors duration-200"
+        className="group h-[52px] px-4 rounded-lg transition-colors duration-200"
     >
-        <Menu className="w-6 h-6 text-gray-600" />
+        <SlidersHorizontal className="w-5 h-5 text-gray-600 group-hover:text-gray-400 transition-colors duration-200" />
     </button>
 );
 

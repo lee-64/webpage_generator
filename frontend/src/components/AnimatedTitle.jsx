@@ -118,48 +118,53 @@ export default function AnimatedTitle() {
     }, []);
 
     return (
-        <div className="relative max-w-7xl mx-auto">
-            <div className="text-center">
-                <h1 className="text-6xl font-bold relative z-10">
-                    <AnimatePresence mode="wait">
-                        {letters.map((letter, i) => (
-                            <motion.span
-                                key={`${letter}-${animationKey}-${i}`}
-                                className={`inline-block ${
-                                    i > 4 ? `bg-gradient-to-r ${colorScheme} bg-clip-text text-transparent` : ''
-                                }`}
-                                initial={{ opacity: 1 }}
-                                animate={animations[animationKey]?.animate(i) || {}}
-                                transition={{ duration: 0.5 }}
-                            >
-                                {<a href=''>{letter}</a>}
-                            </motion.span>
-                        ))}
-                    </AnimatePresence>
-                </h1>
-            </div>
+        <div className="relative mx-auto px-4 py-8 max-w-4xl">
+            <div className="flex flex-col items-center justify-center">
+                {/* Title */}
+                <div className="flex flex-col items-center justify-center mb-4">
+                    <h1 className="text-6xl md:text-7xl font-bold relative z-10">
+                        <AnimatePresence mode="wait">
+                            {letters.map((letter, i) => (
+                                <motion.span
+                                    key={`${letter}-${animationKey}-${i}`}
+                                    className={`inline-block ${
+                                        i > 4 ? `bg-gradient-to-r ${colorScheme} bg-clip-text text-transparent` : ''
+                                    }`}
+                                    initial={{ opacity: 1 }}
+                                    animate={animations[animationKey]?.animate(i) || {}}
+                                    transition={{ duration: 0.5 }}
+                                >
+                                    {<a href=''>{letter}</a>}
+                                </motion.span>
+                            ))}
+                        </AnimatePresence>
+                    </h1>
+                </div>
 
-            {/* Groq attribution */}
-            <motion.div
-                className="flex items-center justify-center mt-4 mb-6"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.5 }}
-            >
-                <span className="text-sm font-mono opacity-80 pr-1.5">powered by</span>
-                <a
-                    href="https://groq.com/"
-                    className="ml-1 hover:opacity-80 transition-opacity"
-                    target="_blank"
-                    rel="noopener noreferrer"
+                {/* Groq Attribution */}
+                <motion.div
+                    className="flex items-center justify-center mb-4"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ delay: 0.3, duration: 0.6 }}
                 >
-                    <img
-                        src="https://www.ciscoinvestments.com/assets/logos/groq-logo.png"
-                        alt="groq"
-                        className="h-5 inline-block mt-1.5"
-                    />
-                </a>
-            </motion.div>
+                    <span className="text-sm font-mono text-gray-400">
+                        Powered by&nbsp;
+                    </span>
+                    <a
+                        href="https://groq.com/"
+                        className="hover:opacity-80 transition-opacity inline-flex items-center"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                    >
+                        <img
+                            src="https://www.ciscoinvestments.com/assets/logos/groq-logo.png"
+                            alt="groq"
+                            className="h-4 inline-block mt-1.5"
+                        />
+                    </a>
+                </motion.div>
+            </div>
         </div>
     );
 }

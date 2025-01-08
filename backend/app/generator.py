@@ -10,7 +10,7 @@ app = Flask(__name__)
 load_dotenv()
 
 # Flag to toggle between development and production for environment variables and sensitive data
-dev = False
+dev = True
 # Development
 if dev:
     app.secret_key = 'dev'
@@ -99,7 +99,8 @@ def get_component_code():
     data = request.get_json()
     user_prompt = data.get("prompt")
 
-    num_responses = session.get("num_responses", "2")  # Number of webpages to generate per user prompt
+    num_responses = session.get("num_responses", 2)  # Number of webpages to generate per user prompt
+    num_responses = int(num_responses)
 
     if session.get("model_type", "70B") == "70B":
         model_type = "llama-3.3-70b-versatile"
@@ -216,7 +217,7 @@ def submit_config():
             print("Invalid Groq API key:", e)
             return jsonify({"status": "failed", "message": f"Invalid Groq API key"})
 
-    session["num_responses"] = num_responses
+    session["num_responses"] = int(num_responses)
     session["model_type"] = model_type
 
     return jsonify({"status": "success", "message": f"Config was received successfully"})
