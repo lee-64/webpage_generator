@@ -12,7 +12,7 @@ app.secret_key = 'dev'
 # Configure CORS properly to handle credentials
 CORS(app, resources={
     r"/*": {
-        "origins": ["http://localhost:3000", "https://useforgeui.vercel.app/"],  # Your frontend origin
+        "origins": ["http://localhost:3000", "https://useforgeui.vercel.app/"],
         "methods": ["GET", "POST", "OPTIONS"],
         "allow_headers": ["Content-Type"],
         "supports_credentials": True
@@ -80,30 +80,37 @@ def get_system_context():
 def get_component_code():
     data = request.get_json()
     user_prompt = data.get('prompt')
+    model_config = data.get("config", {"numResponses": 2, "modelSize": "70B"})
+    num_responses = model_config["numResponses"]  # Number of webpages to generate per user prompt
+    if model_config["modelSize"] == "70B":
+        model_type = "llama-3.3-70b-versatile"
+    else:
+        model_type = "llama-3.1-8b-instant"
     selected_code = data.get('selectedCode', None)
     message_history = data.get('messageHistory', [])
 
-    # Flag to avoid calling the API to generate a new piece of code when debugging
+    # Flag to avoid calling the API to generate a new piece of code when debugging.
     # Set to False when you want the API to be called. Set to True when you want to use this hardcoded option.
-    dev = True
+    dev = False
     if dev:
         components = load_example_components()
         if components:
             return jsonify({
                 "status": "success",
-                "responses": [components[0]['code'],
-                              # components[1]['code'],
-                              # components[2]['code'],
-                              components[3]['code'], ]
+                "responses": [
+                    components[0]['code'],
+                    components[1]['code'],
+                    components[2]['code'],
+                    components[3]['code'],
+                ]
             })
         return jsonify({
             "status": "failed",
             "responses": []
         })
 
-    # TODO: Make parallel api calls to speed up the response time. Look into speeding it up further through Groq console.
+    # TODO: Make parallel API calls to speed up the response time. Look into speeding it up further through Groq console.
     if user_prompt:
-        num_responses = 2  # Number of webpages to generate per user prompt
         responses = []
 
         # If the user has selected a generated response, add it to the message history
@@ -127,7 +134,7 @@ def get_component_code():
         # Generate responses
         for _ in range(num_responses):
             chat_completion = client.chat.completions.create(
-                model="llama-3.3-70b-versatile",
+                model=model_type,
                 messages=[
                     {
                         "role": "system",
@@ -156,13 +163,16 @@ def get_component_code():
                     })
 
 
-@app.route('/submit', methods=['POST'])
+@app.route('/api/submit', methods=['POST'])
 @cross_origin(supports_credentials=True)
 def submit_prompt():
     session.clear()
     data = request.get_json()
     user_prompt = data.get("prompt", 'Create a TODO list')
-    session['user_prompt'] = user_prompt
+    model_config = data.get("config", {"numResponses": 2, "modelSize": "70B"})
+
+    session["user_prompt"] = user_prompt
+    session["model_config"] = model_config
 
     return jsonify({'message': f'Input {user_prompt} was received successfully'})
 
