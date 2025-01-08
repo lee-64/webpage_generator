@@ -182,7 +182,7 @@ export default function Home() {
                                     <div className="w-full">
                                         <UserPrompt
                                             onSubmit={handlePromptSubmit}
-                                            placeholder="Generate React components 5x faster than Claude and v0..."
+                                            placeholder="Generate React components 3.8x faster than Claude and v0..."
                                         />
                                     </div>
                                     <div className="flex flex-wrap justify-center gap-2 mt-4">
