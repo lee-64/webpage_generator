@@ -42,11 +42,6 @@ backend:
 
 
 frontend:
-- fine-tune llama-3.3-70b-versatile for coding (still necessary?)
-  - train it on good design principles such as those from [refactoringUI eBook](https://www.refactoringui.com/)
-- “Made with ❤️ by Lee & Tom” with links to us
-- add a place to put your own api key safely
-- slider/option to control num of responses (definitely set a cap though--maybe a limit of 4-5?)
 - implement a simple way to clear the current chat (probably don't need to "create a new chat" like chatgpt or claude--I think I'm okay with this app being a one-page, no-storage app that doesn't save your chat history once you navigate away if you are)
 
 
