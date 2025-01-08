@@ -4,14 +4,14 @@ import SyntaxHighlighter from 'react-syntax-highlighter';
 import { tomorrowNight } from 'react-syntax-highlighter/dist/esm/styles/hljs';
 import { Copy } from 'lucide-react';
 
-const ResponseCard = ({
+export default function ResponseCard({
   children,
   isExpanded,
   onToggleExpand,
   generatedCode,
   isSelected,
   onSelect
-}) => {
+}) {
   const [isRemoved, setIsRemoved] = useState(false);
   const [transition, setTransition] = useState(false);
   const [viewMode, setViewMode] = useState('preview');
@@ -175,5 +175,3 @@ const ResponseCard = ({
     </>
   );
 };
-
-export default ResponseCard;

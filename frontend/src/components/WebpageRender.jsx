@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import * as Babel from "@babel/standalone";
 
-function WebpageRender({ webpageCode }) {
+export default function WebpageRender({ webpageCode }) {
     const [Component, setComponent] = useState(null);
     const [error, setError] = useState(null);
     const [processedCode, setProcessedCode] = useState('');
@@ -135,5 +135,3 @@ function WebpageRender({ webpageCode }) {
         );
     }
 }
-
-export default WebpageRender;
