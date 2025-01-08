@@ -271,9 +271,9 @@ export default function Home() {
                 isOpen={isConfigOpen}
                 onClose={() => setIsConfigOpen(false)}
                 sliderValue={configState.numResponses}
-                setSliderValue={(value) => handleConfigUpdate({ numResponses: value })}
+                setSliderValue={(value: number) => handleConfigUpdate({ numResponses: value })}
                 modelSize={configState.modelSize}
-                setModelSize={(size) => handleConfigUpdate({ modelSize: size })}
+                setModelSize={(size: '8B' | '70B') => handleConfigUpdate({ modelSize: size })}
             />
         </div>
     );
