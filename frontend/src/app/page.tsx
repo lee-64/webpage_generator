@@ -1,4 +1,3 @@
-// page.tsx
 "use client";
 import React, { useState, useEffect } from "react";
 import UserPrompt from "@/components/UserPrompt";
@@ -17,6 +16,7 @@ interface CodeResponse {
 interface ConfigState {
     numResponses: number;
     modelSize: '8B' | '70B';
+    apiKey: string;
 }
 
 export default function Home() {
@@ -30,7 +30,8 @@ export default function Home() {
     const [isConfigOpen, setIsConfigOpen] = useState(false);
     const [configState, setConfigState] = useState<ConfigState>({
         numResponses: 2,
-        modelSize: '70B'
+        modelSize: '70B',
+        apiKey: ''
     });
 
     const suggestedPrompts = [
@@ -67,6 +68,29 @@ export default function Home() {
             ...prev,
             ...updates
         }));
+    };
+
+    const saveConfig = async () => {
+        try {
+            const response = await fetch('/api/submit-config', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(configState)
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to save configuration');
+            }
+
+            const data = await response.json();
+            if (data.message) {
+                console.log('Configuration saved:', data.message);
+            }
+        } catch (error) {
+            console.error('Error saving configuration:', error);
+        }
     };
 
     const handlePromptSubmit = async (userPrompt: string) => {
@@ -252,7 +276,7 @@ export default function Home() {
 
                     {status === "failed" && !loading && (
                         <p className="text-center text-red-500 mt-4">
-                            Failed to fetch responses. Please try again.
+                            Failed to fetch responses. Please check your Groq API key and try again.
                         </p>
                     )}
                 </div>
@@ -260,9 +284,7 @@ export default function Home() {
             <footer className="w-full bg-gray-100 pb-4 relative bottom-10 left-0">
                 <div className="flex justify-center items-center">
                     <p className="text-xs font-quicksand-600 text-zinc-600">
-                        Made with ❤️ by&nbsp;
-                        <a className="underline" href="https://lee-64.github.io/">Lee</a> &&nbsp;
-                        <a className="underline" href="https://thomazbonato.vercel.app/">Tom</a> — <a className="underline" href="https://github.com/lee-64/webpage_generator.git">GitHub</a>
+                        Made with ❤️ by <a className="underline" href="https://lee-64.github.io/">Lee</a> & <a className="underline" href="https://thomazbonato.vercel.app/">Tom</a> — <a className="underline" href="https://github.com/lee-64/webpage_generator.git">GitHub</a>
                     </p>
                 </div>
             </footer>
@@ -274,6 +296,9 @@ export default function Home() {
                 setSliderValue={(value: number) => handleConfigUpdate({ numResponses: value })}
                 modelSize={configState.modelSize}
                 setModelSize={(size: '8B' | '70B') => handleConfigUpdate({ modelSize: size })}
+                apiKey={configState.apiKey}
+                setApiKey={(value: string) => handleConfigUpdate({ apiKey: value })}
+                onSave={saveConfig}
             />
         </div>
     );

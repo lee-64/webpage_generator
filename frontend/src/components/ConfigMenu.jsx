@@ -3,6 +3,7 @@ import { Menu } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Switch } from '@/components/ui/switch';
 import { Slider } from '@/components/ui/slider';
+import APIKeyInput from './APIKeyInput';
 
 
 export const ConfigButton = ({ onClick }) => (
@@ -14,14 +15,25 @@ export const ConfigButton = ({ onClick }) => (
     </button>
 );
 
+
 export const ConfigMenu = ({
-                               isOpen,
-                               onClose,
-                               sliderValue,
-                               setSliderValue,
-                               modelSize,
-                               setModelSize,
-                           }) => {
+    isOpen,
+    onClose,
+    sliderValue,
+    setSliderValue,
+    modelSize,
+    setModelSize,
+    apiKey,
+    setApiKey,
+    onSave
+}) => {
+    const handleClose = async () => {
+        // Call onSave before closing
+        if (onSave) {
+            await onSave();
+        }
+        onClose();
+    };
     return (
         <AnimatePresence>
             {isOpen && (
@@ -31,7 +43,7 @@ export const ConfigMenu = ({
                         animate={{ opacity: 0.5 }}
                         exit={{ opacity: 0 }}
                         className="fixed inset-0 bg-black/50"
-                        onClick={onClose}
+                        onClick={handleClose}
                     />
                     <motion.div
                         initial={{ scale: 0.95, opacity: 0 }}
@@ -41,8 +53,11 @@ export const ConfigMenu = ({
                     >
                         <div className="space-y-8">
                             <div>
-                                <h3 className="text-xl font-bold tracking-tight mb-6">Model Config</h3>
                                 <div className="space-y-8">
+                                    <APIKeyInput
+                                        value={apiKey}
+                                        onChange={setApiKey}
+                                    />
                                     <div className="space-y-3">
                                         <label className="text-sm font-medium text-gray-700">
                                             Response Count <span className="text-gray-500">({sliderValue})</span>
@@ -58,7 +73,7 @@ export const ConfigMenu = ({
                                     </div>
 
                                     <div className="flex items-center justify-between">
-                                        <label className="text-sm font-medium text-gray-700">Model Size</label>
+                                        <label className="text-sm font-medium text-gray-700">Model Type</label>
                                         <div className="flex items-center space-x-3">
                                             <span className={`text-sm font-medium ${modelSize === '8B' ? 'text-gray-900' : 'text-gray-400'}`}>
                                                 8B
@@ -76,7 +91,7 @@ export const ConfigMenu = ({
                             </div>
 
                             <button
-                                onClick={onClose}
+                                onClick={handleClose}
                                 className="w-full bg-gray-900 text-white rounded-lg py-2.5 font-medium hover:bg-gray-800 transition-colors focus:outline-none focus:ring-2 focus:ring-gray-900 focus:ring-offset-2"
                             >
                                 Confirm
