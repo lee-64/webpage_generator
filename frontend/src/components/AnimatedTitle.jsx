@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import Image from 'next/image';
 
 const animations = {
     typewriter: {
@@ -143,24 +144,23 @@ export default function AnimatedTitle() {
 
                 {/* Groq Attribution */}
                 <motion.div
-                    className="flex items-center justify-center mb-4"
+                    className="flex items-center justify-center"
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ delay: 0.3, duration: 0.6 }}
                 >
-                    <span className="text-sm font-mono text-gray-400">
-                        Powered by&nbsp;
-                    </span>
                     <a
                         href="https://groq.com/"
                         className="hover:opacity-80 transition-opacity inline-flex items-center"
                         target="_blank"
                         rel="noopener noreferrer"
                     >
-                        <img
-                            src="https://www.ciscoinvestments.com/assets/logos/groq-logo.png"
+                        <Image
+                            src="poweredbygroq.svg"
+                            width={600}
+                            height={400}
                             alt="groq"
-                            className="h-4 inline-block mt-1.5"
+                            className="h-6 inline-block mt-1.5"
                         />
                     </a>
                 </motion.div>
