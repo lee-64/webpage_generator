@@ -2,9 +2,9 @@
 Instantly generate and render modern React and Tailwind CSS components. Powered by Groq, creating and shipping front-end web apps has never been easier.
 
 ForgeUI is:
->3.8x faster than Anthropic’s Claude 3.5 Sonnet
->Capable of rendering generated code in-browser, setting it apart from OpenAI's ChatGPT
->Accessible to all, no coding experience required
+>3.8x faster than Anthropic’s Claude 3.5 Sonnet  
+>Capable of rendering generated code in-browser, setting it apart from OpenAI's ChatGPT  
+>Accessible to all, no coding experience required  
 
 ## Running our app
 
