@@ -1,3 +1,11 @@
+# [ForgeUI](https://useforgeui.vercel.app)
+Instantly generate and render modern React and Tailwind CSS components. Powered by Groq, creating and shipping front-end web apps has never been easier.
+
+ForgeUI is:
+>3.8x faster than Anthropic’s Claude 3.5 Sonnet
+>Capable of rendering generated code in-browser, setting it apart from OpenAI's ChatGPT
+>Accessible to all, no coding experience required
+
 ## Running our app
 
 
@@ -30,7 +38,7 @@ pip install -r requirements.txt
 # run the app
 cd app
 
-export GROQ_API_KEY=______
+export GROQ_API_KEY=______  # or, optionally create a .env file
 
 python -m generator
 ```
@@ -42,11 +50,4 @@ backend:
 
 
 frontend:
-- implement a simple way to clear the current chat (probably don't need to "create a new chat" like chatgpt or claude--I think I'm okay with this app being a one-page, no-storage app that doesn't save your chat history once you navigate away if you are)
-
-
-other:
-- Make GitHub repo public and have it linked somewhere with an option to give it a Star
-- “advanced settings/look inside!” to modify system prompt, etc.
-- model toggle (at the app's header bar?)
-  - toggle between 2 models (1 strong but slow, 1 weaker but fast; llama-3.3-70b-versatile & llama3-8b-8192?)
+- implement a simple way to clear the current chat
