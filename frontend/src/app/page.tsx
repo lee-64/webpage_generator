@@ -7,6 +7,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import AnimatedTitle from '@/components/AnimatedTitle';
 import ForgeLoading from '@/components/ForgeLoading';
 import { ConfigButton, ConfigMenu } from '@/components/ConfigMenu';
+import { div } from "motion/react-client";
 
 interface CodeResponse {
     status: string;
@@ -225,7 +226,7 @@ export default function Home() {
                             animate={{ opacity: 1 }}
                             transition={{ duration: 0.6 }}
                         >
-                            <motion.div className="grid grid-cols-2 gap-4" layout>
+                            <motion.div className="grid grid-cols-2 sm:grid-cols-1 gap-4" layout>
                                 <AnimatePresence>
                                     {codeResponses.map((webpageCode, index) => (
                                         <motion.div
