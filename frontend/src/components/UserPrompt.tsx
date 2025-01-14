@@ -1,18 +1,39 @@
-import React, {useState} from 'react';
+"use client";
+import React, {useState, useEffect} from 'react';
 import { SendHorizonal, AlertCircle } from "lucide-react";
 import { motion, AnimatePresence } from 'framer-motion';
 
-export default function UserPrompt({onSubmit, placeholder, apiKey}) {
+interface UserPromptProps {
+    onSubmit: (prompt: string) => void;
+    placeholder: string;
+    apiKey: string;
+    invalidOverride?: boolean; 
+}
+
+export default function UserPrompt({
+    onSubmit, 
+    placeholder, 
+    apiKey, 
+    invalidOverride
+}: UserPromptProps) {
     const [inputPrompt, setPrompt] = useState('');
     const [isInvalid, setIsInvalid] = useState(false);
 
-    const handleSubmit = (event) => {
+    useEffect(() => {
+        if (invalidOverride !== undefined) {
+            setIsInvalid(invalidOverride);
+            if (invalidOverride) {
+                const timer = setTimeout(() => setIsInvalid(false), 2500);
+                return () => clearTimeout(timer);
+            }
+        }
+    }, [invalidOverride]);
+
+    const handleSubmit = (event: React.FormEvent) => {
         event.preventDefault();
 
-        // Trim the input to remove unnecessary whitespace
         const trimmedPrompt = inputPrompt.trim();
 
-        // Check if the input is not empty
         if (trimmedPrompt === "") {
             alert("Please enter a valid prompt.");
             return;
@@ -24,16 +45,13 @@ export default function UserPrompt({onSubmit, placeholder, apiKey}) {
             return;
         }
 
-        // Call the onSubmit handler passed from Main.js
         onSubmit(trimmedPrompt);
-
         setPrompt('');
     };
 
     return (
         <form onSubmit={handleSubmit} className="w-full">
             <div className="flex flex-col gap-2">
-                {/* Alert */}
                 <AnimatePresence>
                     {isInvalid && (
                     <motion.div
@@ -49,7 +67,6 @@ export default function UserPrompt({onSubmit, placeholder, apiKey}) {
                     )}
                 </AnimatePresence>
 
-                {/* Prompt Box Container */}
                 <div className="relative">
                     <input
                         type="text"

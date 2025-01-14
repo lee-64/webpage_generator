@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, use } from "react";
 import UserPrompt from "@/components/UserPrompt";
 import ResponseCard from "@/components/ResponseCard";
 import WebpageRender from "@/components/WebpageRender";
@@ -28,6 +28,7 @@ export default function Home() {
     const [loading, setLoading] = useState(false);
     const [expandedIndex, setExpandedIndex] = useState<number | null>(null);
     const [isConfigOpen, setIsConfigOpen] = useState(false);
+    const [isInvalidSubmit, setIsInvalidSubmit] = useState(false);
     const [configState, setConfigState] = useState<ConfigState>({
         numResponses: 2,
         modelSize: '70B',
@@ -100,8 +101,9 @@ export default function Home() {
         }
 
         if (!configState.apiKey?.trim()) {
-            alert("Please enter a valid API key.");
-            return;
+            setIsInvalidSubmit(true)
+            const timer = setTimeout(() => setIsInvalidSubmit(false), 3000);
+            return () => clearTimeout(timer);
         }
 
         setLoading(true);
@@ -189,6 +191,7 @@ export default function Home() {
                                             onSubmit={handlePromptSubmit}
                                             placeholder="Generate React components 3.8x faster than Claude and v0..."
                                             apiKey={configState.apiKey}
+                                            invalidOverride={isInvalidSubmit}
                                         />
                                     </div>
                                     <div className="flex flex-wrap justify-center gap-2 mt-4">
