@@ -7,7 +7,6 @@ import { motion, AnimatePresence } from "framer-motion";
 import AnimatedTitle from '@/components/AnimatedTitle';
 import ForgeLoading from '@/components/ForgeLoading';
 import { ConfigButton, ConfigMenu } from '@/components/ConfigMenu';
-import { div } from "motion/react-client";
 
 interface CodeResponse {
     status: string;
@@ -100,6 +99,11 @@ export default function Home() {
             return;
         }
 
+        if (!configState.apiKey?.trim()) {
+            alert("Please enter a valid API key.");
+            return;
+        }
+
         setLoading(true);
         setStatus(null);
         setCodeResponses([]);
@@ -184,6 +188,7 @@ export default function Home() {
                                         <UserPrompt
                                             onSubmit={handlePromptSubmit}
                                             placeholder="Generate React components 3.8x faster than Claude and v0..."
+                                            apiKey={configState.apiKey}
                                         />
                                     </div>
                                     <div className="flex flex-wrap justify-center gap-2 mt-4">
@@ -215,18 +220,22 @@ export default function Home() {
                     {/* Show prompt at bottom when loading following the initial successful response */}
                     {loading && status === "success" && (
                         <div className="fixed bottom-10 left-1/2 transform -translate-x-1/2 w-full max-w-3xl px-5 relative">
-                            <UserPrompt onSubmit={handlePromptSubmit} placeholder="Refine your selection..."/>
+                            <UserPrompt 
+                                onSubmit={handlePromptSubmit}
+                                placeholder="Refine your selection..."
+                                apiKey={configState.apiKey}
+                            />
                         </div>
                     )}
 
                     {status === "success" && (
                         <motion.div
-                            className="mb-6 mx-20"
+                            className="mb-6 mx-2 md:mx-8 lg:mx-20"
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
                             transition={{ duration: 0.6 }}
                         >
-                            <motion.div className="grid grid-cols-2 sm:grid-cols-1 gap-4" layout>
+                            <motion.div  className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full px-2 md:px-4" layout>
                                 <AnimatePresence>
                                     {codeResponses.map((webpageCode, index) => (
                                         <motion.div
@@ -270,7 +279,11 @@ export default function Home() {
                                 animate={{ y: 0, opacity: 1 }}
                                 transition={{ delay: 0.3 }}
                             >
-                                <UserPrompt onSubmit={handlePromptSubmit} placeholder="Refine your selection..."/>
+                                <UserPrompt 
+                                    onSubmit={handlePromptSubmit} 
+                                    placeholder="Refine your selection..."
+                                    apiKey={configState.apiKey}
+                                />
                             </motion.div>
                         </motion.div>
                     )}
